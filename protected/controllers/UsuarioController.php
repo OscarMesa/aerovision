@@ -48,11 +48,16 @@ class UsuarioController extends Controller
         
         public function actionInicio()
         {
-            Yii::import("application.models.appjoomla.*", true);
-            $model=new LoginForm;
-            $this->render('login',array(
-                'model'=> $model,
-                'model1' => V7guiUsers::model()));
+            //print_r(Yii::app()->user);exit();
+            if(!Yii::app()->user->isGuest)
+            {
+                $this->render('inicio',array());
+            }else{
+                Yii::import("application.models.appjoomla.*", true);
+                $this->render('login',array(
+                    'model' => V7guiUsers::model()));
+            }
+
         }
         
 	/**
