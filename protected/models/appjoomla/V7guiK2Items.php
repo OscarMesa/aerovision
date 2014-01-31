@@ -40,6 +40,7 @@
  * @property string $metakey
  * @property string $plugins
  * @property string $language
+ * @property file $fileUpload archivo adjunto
  */
 class V7guiK2Items extends CActiveRecord
 {
@@ -126,6 +127,7 @@ class V7guiK2Items extends CActiveRecord
 			'metakey' => 'Metakey',
 			'plugins' => 'Plugins',
 			'language' => 'Language',
+                        'fileUpload' => 'Archivo'
 		);
 	}
 

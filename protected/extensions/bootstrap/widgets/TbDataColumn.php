@@ -53,4 +53,13 @@ class TbDataColumn extends CDataColumn
 		$this->renderFilterCellContent();
 		echo '</div></td>';
 	}
+        
+        public function popDropBox($data)
+        {
+            $links = '';
+            foreach ($data as $row) {
+                $links .= '<li><a href="http://localhost/aerovision/media/k2/attachments/'.$row->filename.'">'.$row->filename.'</a></li>';
+            }
+            return $links;
+        }
 }

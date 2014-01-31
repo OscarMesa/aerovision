@@ -51,16 +51,17 @@ return array(
             'allowAutoLogin' => true,
         ),
         // uncomment the following to enable URLs in path-format
-        /*
+        
           'urlManager'=>array(
           'urlFormat'=>'path',
           'rules'=>array(
-          '<controller:\w+>/<id:\d+>'=>'<controller>/view',
-          '<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
-          '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+//          '<controller:\w+>/<id:\d+>'=>'<controller>/view',
+//          '<controller:\w+>/<action:\w+>/<id:\d+>'=>'<controller>/<action>',
+//          '<controller:\w+>/<action:\w+>'=>'<controller>/<action>',
+              'programa/subirArchivo/<id>' => 'programa/subirArchivo',
           ),
           ),
-         */
+         
         'db' => array(
             'connectionString' => 'mysql:host=localhost;dbname=appaerovision;unix_socket:/path/to/socket/mysql.sock',
             'emulatePrepare' => true,
