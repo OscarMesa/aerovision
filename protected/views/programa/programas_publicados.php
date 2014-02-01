@@ -1,5 +1,5 @@
 <?php
-
+    Yii::import('application.vendor.*');
     Yii::import("application.models.appjoomla.*", true);
     $criteria = new CDbCriteria();
     $criteria->alias = 'item';
@@ -79,32 +79,23 @@ $this->widget(
             array(
                 'type' => 'raw',
                 'header'=> 'Adjuntos',
-                'value' => 'popDropBox($data->arch_adjuntos)'
+                'value' => 'Utilidades::popDropBox($data->arch_adjuntos)'
                 ),
             array(
                 'type' => 'raw',
                 'header'=> 'Adjuntar archivo',
-                'value' => 'generarLink($data->id)'
+                'value' => 'Utilidades::generarLink($data->id)'
                 ),
             ),
         )
        );
+       
 ?>
 </div>
 <?php    
-    function popDropBox($data)
-    {
-        $links = '';
-        foreach ($data as $row) {
-            $links .= '<li><a href="http://localhost/aerovision/media/k2/attachments/'.$row->filename.'">'.$row->filename.'</a></li>';
-        }
-        return $links;
-    }
     
-    function generarLink($id)
-    {
-        return '<a href="'.Yii::app()->createUrl('programa/subirArchivo/'.$id).'" class="btn btn-small"><i class="icon-upload "></i></a>';
-    }
+
+  
 ?>
 
 

@@ -16,7 +16,9 @@ return array(
     // autoloading model and component classes
     'import' => array(
         'application.models.*',
+        'application.models.appjoomla.*',
         'application.components.*',
+        'ext.yii-mail.YiiMailMessage',
     ),
     'modules' => array(
         // uncomment the following to enable the Gii tool
@@ -111,6 +113,17 @@ return array(
               ),
              */
             ),
+        ),
+        'mail' => array(
+                'class' => 'ext.yii-mail.YiiMail',
+                'transportType'=>'smtp',
+                'transportOptions'=>array(
+                        'host'=>'aerovision.com.co',
+                        'username'=>'info@aerovision.com.co',
+                        'password'=>'aerovision',
+                        'port'=>'25',                       
+                ),
+                'viewPath' => 'application.views.mail',             
         ),
     ),
     // application-level parameters that can be accessed

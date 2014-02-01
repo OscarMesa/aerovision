@@ -39,7 +39,7 @@ class UserIdentity extends CUserIdentity
                 $this->errorCode=self::ERROR_TYPEUSER_INVALID;
             }
             else{
-                $this->_id=$user->username;
+                $this->_id=$user->id;
                // $this->setState('role', $user->rol);
                //  $this->setState('admin', 1);
 

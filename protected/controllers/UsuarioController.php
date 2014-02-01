@@ -111,7 +111,7 @@ class UsuarioController extends Controller {
                 $between = false;
             }
         }
-
+        Yii::import('application.vendor.*');
         Yii::import("application.models.appjoomla.*", true);
         $criteria = new CDbCriteria();
         $criteria->alias = 'item';
@@ -154,7 +154,12 @@ class UsuarioController extends Controller {
                 array(
                     'type' => 'raw',
                     'header' => 'Adjuntos',
-                    'value' => '$this->popDropBox($data->arch_adjuntos)'
+                    'value' => 'Utilidades::popDropBox($data->arch_adjuntos)'
+                ),
+                array(
+                'type' => 'raw',
+                'header'=> 'Adjuntar archivo',
+                'value' => 'Utilidades::generarLink($data->id)'
                 ),
             ),
                 )
