@@ -27,7 +27,7 @@ class AprobacionRevision extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('id_revision, aprobado', 'required'),
+			array('id_revision', 'required'),
 			array('id_revision', 'numerical', 'integerOnly'=>true),
                         array('aprobado','type','type'=>'boolean'),
 

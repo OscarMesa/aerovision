@@ -7,7 +7,7 @@
 Yii::setPathOfAlias('bootstrap', dirname(__FILE__) . '/../extensions/bootstrap');
 return array(
     'basePath' => dirname(__FILE__) . DIRECTORY_SEPARATOR . '..',
-    'name' => 'aerovision',
+    'name' => 'aerovision',    
     'language' => "es",
     'defaultController' => 'usuario/inicio',
     'theme' => 'aerovision',
@@ -38,10 +38,15 @@ return array(
         'log' => array(
             'class' => 'CLogRouter',
             'routes' => array(
-                array(
+               /* array(
                     'class' => 'CWebLogRoute',
                     'categories' => 'system.db.CDbCommand',
                     'showInFireBug' => true,
+                ),*/
+                array(
+                    'class'=>'CEmailLogRoute',
+                    'levels'=>'error, warning',
+                    'emails'=>'oscarmesa.elpoli@gmail.com',
                 ),
             ),
         ),
@@ -131,6 +136,6 @@ return array(
     // using Yii::app()->params['paramName']
     'params' => array(
         // this is used in contact page
-        'adminEmail' => 'webmaster@example.com',
+        'adminEmail' => 'info@aerovision.com.co',
     ),
 );

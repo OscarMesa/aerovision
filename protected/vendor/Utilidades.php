@@ -43,13 +43,13 @@ class Utilidades {
                     return $perfil->id==7?'<a href="' . Yii::app()->createUrl('programa/ActualizaEstado/' . $data->id.'/2') . '" class=""><i>'.$estado->nombre_estado.'</i></a>':'<p>'.$estado->nombre_estado.'<p/>'; 
                     break;
                 case 3:
-                    return $perfil->id==8?'<a href="' . Yii::app()->createUrl('programa/ActualizaEstado/' . $data->id.'/3') . '" class=""><i>'.$estado->nombre_estado.'</i></a>':'<p>'.$estado->nombre_estado.'<p/>'; 
+                    return $perfil->id==7?'<a style="color:red;" href="' . Yii::app()->createUrl('programa/ActualizaEstado/' . $data->id.'/3') . '" class=""><i>'.$estado->nombre_estado.'</i></a>':'<p>'.$estado->nombre_estado.'<p/>'; 
                     break;
                 case 4:
-                    return $perfil->id==7?'<a href="' . Yii::app()->createUrl('programa/ActualizaEstado/' . $data->id.'/4') . '" class=""><i>'.$estado->nombre_estado.'</i></a>':'<p>'.$estado->nombre_estado.'<p/>'; 
+                    return $perfil->id==8?'<a href="' . Yii::app()->createUrl('programa/ActualizaEstado/' . $data->id.'/4') . '" class=""><i>'.$estado->nombre_estado.'</i></a>':'<p>'.$estado->nombre_estado.'<p/>'; 
                     break;
                 case 5:
-                    return '<p>'.$estado->nombre_estado.'<p/>'; 
+                    return $perfil->id==8?'<a style="color:red;" href="' . Yii::app()->createUrl('programa/ActualizaEstado/' . $data->id.'/5') . '" class=""><i>'.$estado->nombre_estado.'</i></a>':'<p>'.$estado->nombre_estado.'<p/>'; 
                     break;
                 }
         }

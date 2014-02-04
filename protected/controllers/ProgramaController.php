@@ -104,11 +104,10 @@ class ProgramaController extends Controller {
         if (isset($_POST['V7guiK2Items'])) {
             $revision = new Revision();
             $revision->id_programa = $_POST['V7guiK2Items']['id'];
+            $revision->id_usuario = Yii::app()->user->getId();
             switch ($_POST['V7guiK2Items']['estado']) {
                 case 1:
                     $revision->id_estado_revision =  $_POST['AprobacionRevision']['Radio_aprobar'];
-                    $revision->id_usuario = Yii::app()->user->getId();
-                    
                     if ($revision->save()) {
                         $aporabacion = new AprobacionRevision();
                         $aporabacion->id_revision = $revision->id_revision;
@@ -126,9 +125,22 @@ class ProgramaController extends Controller {
                     }
                     break;
                 case 2:
-                    echo '<pre>';
-                    print_r($_POST);
-                    exit();
+                    $revision->id_estado_revision =  $_POST['AprobacionRevision']['Radio_aprobar'];
+                    if ($revision->save()) {
+                        $aporabacion = new AprobacionRevision();
+                        $aporabacion->id_revision = $revision->id_revision;
+                        $aporabacion->aprobado = $revision->id_estado_revision == 5?FALSE:$revision->id_estado_revision==4?TRUE:FALSE;
+                        $aporabacion->motivos = $_POST['AprobacionRevision']['razones_aprobacion'];
+                        if($aporabacion->save()){
+                            $this->enviarCorreoUsuarioNettic($revision->id_programa,$aporabacion);
+                        }else{
+                            print_r($aporabacion->errors);
+                            exit();
+                        }
+                    }else {
+                        print_r($revision->errors);
+                        exit();
+                    }
                     break;
                 case 3:
                     break;
@@ -141,6 +153,21 @@ class ProgramaController extends Controller {
                 'estado' => $estado,
                 'programa' => V7guiK2Items::model()->findByPk($programa)));
         }
+    }
+    public function enviarCorreoUsuarioNettic($id_programa,$aprobacion)
+    {
+        $programa = V7guiK2Items::model()->findByPk($id_programa);
+        $message = new YiiMailMessage();
+        //Se le envia el correo a el usuario de nettic que aprobo o desaprobo la publicacion.
+        $usuario = V7guiUsers::model()->with('revisiones')->find('revisiones.id_estado_revision=2 OR revisiones.id_estado_revision=3 AND id_programa=' . $id_programa);
+        $message->view = "confirmacionUsuarioNettic";
+        $params = array('programa' => $programa, 'usuario' => $usuario,'aprobacion' => $aprobacion);
+        $message->subject = 'Aprovación del programa ' . $programa->title . '.';
+        $message->setBody($params, 'text/html');
+        // if ($usuario->email == 'oscarmesa.elp                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        oli@gmail.com') {
+        $message->addTo('oscarmesa.elpoli@gmail.com');
+        $message->from = 'info@aerovision.com.co';
+        Yii::app()->mail->send($message);
     }
 
     public function enviarCorreoCliente($id_programa,$aprobacion) {

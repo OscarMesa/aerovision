@@ -45,10 +45,10 @@ class UsuarioController extends Controller {
     public function actionFiltroProgramasXFechas() {
         $session = new CHttpSession;
         $session->open();
-        if(isset($_POST['data'])){
+        if (isset($_POST['data'])) {
             $data = $_POST['data'];
             $session['filPrgFchData'] = $data;
-        }else{
+        } else {
             $data = $session['filPrgFchData'];
         }
         $data = explode(',', $data);
@@ -61,77 +61,76 @@ class UsuarioController extends Controller {
             $campo = 'item.modified';
             if ($data[1] == 1) {
                 $fecha_mayor = date('Y-m-d');
-                $fecha_menor = $this->dameFecha(date('Y-m-d'), 30,'-');
-            }else if($data[1] == 2){
-                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 31,'-');
-                $fecha_menor = $this->dameFecha($fecha_mayor, 60,'-');//2*30
-            }else if($data[1] == 3){
-                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 92,'-');
-                $fecha_menor = $this->dameFecha($fecha_mayor, 120,'-');//4*30
-            }else if($data[1] == 4){
-                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 213,'-');
-                $fecha_menor = $this->dameFecha($fecha_mayor, 240,'-');//8*30
-            }else if($data[1] == 5){
-                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 454,'-');
-                $fecha_menor = $this->dameFecha($fecha_mayor, 360,'-');//12*30
-            }else if($data[1] == 6){
-                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 815,'-');
-                $fecha_menor = $this->dameFecha($fecha_mayor, 360,'-');//12*30
+                $fecha_menor = $this->dameFecha(date('Y-m-d'), 30, '-');
+            } else if ($data[1] == 2) {
+                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 31, '-');
+                $fecha_menor = $this->dameFecha($fecha_mayor, 60, '-'); //2*30
+            } else if ($data[1] == 3) {
+                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 92, '-');
+                $fecha_menor = $this->dameFecha($fecha_mayor, 120, '-'); //4*30
+            } else if ($data[1] == 4) {
+                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 213, '-');
+                $fecha_menor = $this->dameFecha($fecha_mayor, 240, '-'); //8*30
+            } else if ($data[1] == 5) {
+                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 454, '-');
+                $fecha_menor = $this->dameFecha($fecha_mayor, 360, '-'); //12*30
+            } else if ($data[1] == 6) {
+                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 815, '-');
+                $fecha_menor = $this->dameFecha($fecha_mayor, 360, '-'); //12*30
             }
         } else if ($data[0] == '#fin') {
             $campo = 'item.publish_down';
-            if($data[1] == 1){
+            if ($data[1] == 1) {
                 $fecha_mayor = '00-00-00';
                 $fecha_menor = '00-00-00';
-            }else if($data[1] == 2){
+            } else if ($data[1] == 2) {
                 $fecha_menor = date('Y-m-d');
                 $between = FALSE;
                 $operacion = '<';
-            }else if($data[1] == 3){
-                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 30,'+');
+            } else if ($data[1] == 3) {
+                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 30, '+');
                 $fecha_menor = date('Y-m-d');
-            }else if($data[1] == 4){
-                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 60,'+');
+            } else if ($data[1] == 4) {
+                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 60, '+');
                 $fecha_menor = date('Y-m-d');
-            }else if($data[1] == 5){
+            } else if ($data[1] == 5) {
                 $fecha_menor = date('Y-m-d');
-                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 30,'-');
-            }else if($data[1] ==6){
-                $fecha_menor = $this->dameFecha(date('Y-m-d'), 30,'-');
-                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 90,'-');
-            }else if($data[1] == 7){
-                $fecha_menor = $this->dameFecha(date('Y-m-d'), 90,'-');
-                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 180,'-');
-            }else if($data[1] == 8){
-                $fecha_menor = $this->dameFecha(date('Y-m-d'), 180,'-');
-                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 360,'-');
-            }else if($data[1] == 9){
-                $fecha_menor = $this->dameFecha(date('Y-m-d'), 360  ,'-');
+                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 30, '-');
+            } else if ($data[1] == 6) {
+                $fecha_menor = $this->dameFecha(date('Y-m-d'), 30, '-');
+                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 90, '-');
+            } else if ($data[1] == 7) {
+                $fecha_menor = $this->dameFecha(date('Y-m-d'), 90, '-');
+                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 180, '-');
+            } else if ($data[1] == 8) {
+                $fecha_menor = $this->dameFecha(date('Y-m-d'), 180, '-');
+                $fecha_mayor = $this->dameFecha(date('Y-m-d'), 360, '-');
+            } else if ($data[1] == 9) {
+                $fecha_menor = $this->dameFecha(date('Y-m-d'), 360, '-');
                 $operacion = '<';
                 $between = false;
             }
         }
         Yii::import('application.vendor.*');
-        Yii::import("application.models.appjoomla.*", true);
         $criteria = new CDbCriteria();
         $criteria->alias = 'item';
         $criteria->with = array(
             'adjuntos' => array(
-              //  'alias' => 'a_adj',
+            //  'alias' => 'a_adj',
             ),
             'category' => array(
                 'aliar' => 'cat',
             ),
         );
         $criteria->addInCondition('item.catid', V7guiK2Categories::buscarTodasCategorias(3));
-        if($between){
-            echo 'Filtro entre '.$fecha_menor.' y '.$fecha_mayor;
-            $criteria->addCondition('DATE_FORMAT('.$campo.',"%Y-%m-%d") BETWEEN '.'DATE_FORMAT("'.$fecha_menor.'","%Y-%m-%d") AND '.'DATE_FORMAT("'.$fecha_mayor .'","%Y-%m-%d")');
-        }else{
-            echo ($operacion=='<'?'Filtro menor a ':'Filtro mayor a ').$fecha_menor;
-            $condicion = 'DATE_FORMAT('.$campo.',"%Y-%m-%d")'.$operacion.'DATE_FORMAT("'.$fecha_menor.'","%Y-%m-%d") AND DATE_FORMAT('.$campo.',"%Y-%m-%d")!=DATE_FORMAT("00-00-00","%Y-%m-%d")';
+        if ($between) {
+            echo 'Filtro entre ' . $fecha_menor . ' y ' . $fecha_mayor;
+            $criteria->addCondition('DATE_FORMAT(' . $campo . ',"%Y-%m-%d") BETWEEN ' . 'DATE_FORMAT("' . $fecha_menor . '","%Y-%m-%d") AND ' . 'DATE_FORMAT("' . $fecha_mayor . '","%Y-%m-%d")');
+        } else {
+            echo ($operacion == '<' ? 'Filtro menor a ' : 'Filtro mayor a ') . $fecha_menor;
+            $condicion = 'DATE_FORMAT(' . $campo . ',"%Y-%m-%d")' . $operacion . 'DATE_FORMAT("' . $fecha_menor . '","%Y-%m-%d") AND DATE_FORMAT(' . $campo . ',"%Y-%m-%d")!=DATE_FORMAT("00-00-00","%Y-%m-%d")';
             // echo '<script>alert(\''.$condicion.'\');</script >';
-             $criteria->addCondition($condicion);
+            $criteria->addCondition($condicion);
         }
         $dataProvider = new CActiveDataProvider('V7guiK2Items', array(
             'criteria' => $criteria,
@@ -140,35 +139,71 @@ class UsuarioController extends Controller {
             )
                 )
         );
-
-        $this->widget('bootstrap.widgets.TbGridView', array(
-            'id' => 'lista-programas',
-            'dataProvider' => $dataProvider,
-            //'filter' => V7guiK2Items::model(),
-            'type' => 'striped bordered condensed',
-            'columns' => array(
-                'title',
-                'created',
-                'modified',
-                'publish_down',
-                array(
-                    'type' => 'raw',
-                    'header' => 'Adjuntos',
-                    'value' => 'Utilidades::popDropBox($data->adjuntos)'
+        $usuario = V7guiUsers::model()->findByPk(Yii::app()->user->getId());
+        $perfil = Utilidades::validarTipoUsuario($usuario->grupos);
+        if ($perfil->id == 8) {
+            $this->widget('bootstrap.widgets.TbGridView', array(
+                'id' => 'lista-programas',
+                'dataProvider' => $dataProvider,
+                //'filter' => V7guiK2Items::model(),
+                'type' => 'striped bordered condensed',
+                'columns' => array(
+                    'title',
+                    'created',
+                    'modified',
+                    'publish_down',
+                    array(
+                        'type' => 'raw',
+                        'header' => 'Adjuntos',
+                        'value' => 'Utilidades::popDropBox($data->adjuntos)'
+                    ),
+                    array(
+                        'type' => 'raw',
+                        'header' => 'Estado',
+                        'value' => function($data, $row) use ($perfil) {
+                            return Utilidades::generarEstado($data, $perfil);
+                        },
+                    ),
                 ),
-                array(
-                'type' => 'raw',
-                'header'=> 'Adjuntar archivo',
-                'value' => 'Utilidades::generarLink($data->id)'
+                    )
+            );
+        } else if ($perfil->id == 7) {
+            $this->widget('bootstrap.widgets.TbGridView', array(
+                'id' => 'lista-programas',
+                'dataProvider' => $dataProvider,
+                //'filter' => V7guiK2Items::model(),
+                'type' => 'striped bordered condensed',
+                'columns' => array(
+                    'title',
+                    'created',
+                    'modified',
+                    'publish_down',
+                    array(
+                        'type' => 'raw',
+                        'header' => 'Adjuntos',
+                        'value' => 'Utilidades::popDropBox($data->adjuntos)'
+                    ),
+                    array(
+                        'type' => 'raw',
+                        'header' => 'Adjuntar archivo',
+                        'value' => 'Utilidades::generarLink($data)'
+                    ),
+                    array(
+                        'type' => 'raw',
+                        'header' => 'Estado',
+                        'value' => function($data, $row) use ($perfil) {
+                            return Utilidades::generarEstado($data, $perfil);
+                        },
+                    ),
                 ),
-            ),
-                )
-        );
+                    )
+            );
+        }
     }
-    
+
     public function dameFecha($fecha, $dia, $operacion) {
         list($year, $mon, $day) = explode('-', $fecha);
-        return $operacion == '-'?date('Y-m-d', mktime(0, 0, 0, $mon, $day - $dia, $year)):date('Y-m-d', mktime(0, 0, 0, $mon, $day + $dia, $year));
+        return $operacion == '-' ? date('Y-m-d', mktime(0, 0, 0, $mon, $day - $dia, $year)) : date('Y-m-d', mktime(0, 0, 0, $mon, $day + $dia, $year));
     }
 
     public function actionInicio() {
@@ -176,9 +211,7 @@ class UsuarioController extends Controller {
         if (!Yii::app()->user->isGuest) {
             $this->render('inicio', array());
         } else {
-            Yii::import("application.models.appjoomla.*", true);
-            $this->render('login', array(
-                'model' => V7guiUsers::model()));
+            $this->redirect('site/login');
         }
     }
 

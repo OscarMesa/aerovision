@@ -3,19 +3,13 @@
         'type' => 'tabs',
         'tabs' => array(
                 array('id' => 'tab1', 'label' => 'Programas', 'content' => $this->renderPartial('application.views.programa.programas_publicados', null, true), 'active' => true,),
-                array('id' => 'tab2', 'label' => 'Tab 2', 'content' => 'loading ....',),
-                array('id' => 'tab3', 'label' => 'Tab 3', 'content' => 'loading ....',),
+//                array('id' => 'tab2', 'label' => 'Tab 2', 'content' => 'loading ....',),
+//                array('id' => 'tab3', 'label' => 'Tab 3', 'content' => 'loading ....',),
         ),
         'events'=>array('shown'=>'js:loadContent')
     )    
 );
 
-//$item = V7guiK2Items::model()->findByPk(302); 
-//echo '<pre>';
-//print_r($item->revisiones);
-$id_programa = 302;
-$usuario = V7guiUsers::model()->with('revisiones')->find('revisiones.id_estado_revision=1 AND id_programa='.$id_programa);
-print_r($usuario);
 ?>
 
 <script type="text/javascript">
