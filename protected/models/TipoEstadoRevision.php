@@ -1,23 +1,23 @@
 <?php
 
 /**
- * This is the model class for table "v7gui_usergroups".
+ * This is the model class for table "tipo_estado_revision".
  *
- * The followings are the available columns in table 'v7gui_usergroups':
- * @property string $id
- * @property string $parent_id
- * @property integer $lft
- * @property integer $rgt
- * @property string $title
+ * The followings are the available columns in table 'tipo_estado_revision':
+ * @property integer $id_estado
+ * @property string $nombre_estado
+ *
+ * The followings are the available model relations:
+ * @property Revision[] $revisions
  */
-class V7guiUsergroups extends CActiveRecord
+class TipoEstadoRevision extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'wwwaerov_joomla.v7gui_usergroups';
+		return 'appaerovision.tipo_estado_revision';
 	}
 
 	/**
@@ -28,12 +28,11 @@ class V7guiUsergroups extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lft, rgt', 'numerical', 'integerOnly'=>true),
-			array('parent_id', 'length', 'max'=>10),
-			array('title', 'length', 'max'=>100),
+			array('nombre_estado', 'required'),
+			array('nombre_estado', 'length', 'max'=>40),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, parent_id, lft, rgt, title', 'safe', 'on'=>'search'),
+			array('id_estado, nombre_estado', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -45,7 +44,7 @@ class V7guiUsergroups extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-                    'usuarios' => array(self::MANY_MANY, 'V7guiUsers', 'v7gui_user_usergroup_map(user_id , group_id)'),
+			'revisions' => array(self::HAS_MANY, 'Revision', 'id_estado_revision'),
 		);
 	}
 
@@ -55,11 +54,8 @@ class V7guiUsergroups extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'Primary Key',
-			'parent_id' => 'Adjacency List Reference Id',
-			'lft' => 'Nested set lft.',
-			'rgt' => 'Nested set rgt.',
-			'title' => 'Title',
+			'id_estado' => 'Id Estado',
+			'nombre_estado' => 'Nombre Estado',
 		);
 	}
 
@@ -81,11 +77,8 @@ class V7guiUsergroups extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('parent_id',$this->parent_id,true);
-		$criteria->compare('lft',$this->lft);
-		$criteria->compare('rgt',$this->rgt);
-		$criteria->compare('title',$this->title,true);
+		$criteria->compare('id_estado',$this->id_estado);
+		$criteria->compare('nombre_estado',$this->nombre_estado,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -93,18 +86,10 @@ class V7guiUsergroups extends CActiveRecord
 	}
 
 	/**
-	 * @return CDbConnection the database connection used for this class
-	 */
-	public function getDbConnection()
-	{
-		return Yii::app()->db2;
-	}
-
-	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return V7guiUsergroups the static model class
+	 * @return TipoEstadoRevision the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

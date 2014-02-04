@@ -26,7 +26,7 @@ class V7guiUsers extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'v7gui_users';
+		return 'wwwaerov_joomla.v7gui_users';
 	}
 
 	/**
@@ -59,6 +59,7 @@ class V7guiUsers extends CActiveRecord
 		// class name for the relations automatically generated below.
 		return array(
                     'grupos' => array(self::MANY_MANY, 'V7guiUsergroups', 'v7gui_user_usergroup_map(user_id , group_id)'),
+                    'revisiones' => array(self::HAS_MANY,'Revision','id_usuario'),
 		);
 	}
 

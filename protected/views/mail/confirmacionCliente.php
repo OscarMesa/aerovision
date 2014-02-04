@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-<title>Nuevo documento aerovision</title>
+<title>Aprovación del programa</title>
 
 <!-- Hotmail ignora cierto código valido, se agrega esto -->
 <style type="text/css">
@@ -69,7 +69,7 @@ html
     <td align="right">
     <table width="280"  align="center" border="0" cellspacing="0" cellpadding="0">
       <tr>
-        <td width="147" height="28" bgcolor="#242424" style="text-align:center; font-size: 18px; color: #FFFFFF; font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif"><strong>Archivo Adjunto</strong></td>
+        <td width="147" height="28" bgcolor="#242424" style="text-align:center; font-size: 18px; color: #FFFFFF; font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif"><strong><?php echo $programa->title; ?></strong></td>
         <td width="23" height="28"><img src="http://fc08.deviantart.net/fs70/f/2011/160/0/a/gmail_metal_icon_256x256_px_by_agamemmnon-d3igont.png" width="41" height="33" /></td>
         </tr>
     </table></td>
@@ -78,28 +78,27 @@ html
   <table width="580" align="center" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td>
-        <span style="text-align:center; font-size: 13px; color: #0A0A04; line-height:18px; font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif">Se a realizado la publicacion de de un archivo adjunto en el programa <b><?php echo $programa->title; ?><b/></span></td>
+        <span style="text-align:center; font-size: 13px; color: #0A0A04; line-height:18px; font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif">Un usuario de nettic realizo la revisión en el programa y <?php ($aprobacion->aprobado?'aprobo':'desaprobo');?> el programa<b><?php echo $programa->title; ?></b>. Le esetamos confirmando esta acción con el fin de que uste realice la aprobación o correcciones de esta. Dirijace al siguiente link.</span>
+    </td>
   </tr>
+      <?php if($aprobacion->motivos != ''){?>
+      <tr>
+          <td>
+              <b>Algunos comentarios y razones, se exponen a continuacion:</b><br/>
+              <?php echo $aprobacion->motivos;?>
+          </td>
+      </tr>     
+      <?php } ?>
+      <tr>
+          <td>
+            <?php if($aprobacion->aprobado){?>
+              <a href="<?php echo Yii::app()->baseUrl .'/programa/ActualizaEstado/'.$programa->id.'/2';?>">Click aqui</a>
+            <?php }else{?>
+              
+            <?php }?>  
+          </td>
+      </tr>
 </table>
-                                
-    <table width="520"border="0" align="center" cellspacing="0" cellpadding="0">
-      <tr>
-        <th width="90" height="28"  style="text-align:center; font-size: 15px; padding: 5px; color: #FFFFFF; font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif"><strong>Nombres de archivos</strong></th>
-        <th width="9" height="43"></th>
-        <th width="90" height="28"  style="text-align:center; font-size: 15px; padding: 5px; color: #FFFFFF; font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif"><strong>Nombre de usuario publicador</strong></th>
-        <th width="9" height="43"></th>
-      </tr>
-      <tr>
-        <td width="90" bgcolor="#242424" height="28"  style="text-align:center; font-size: 15px; padding: 5px; color: #A8A7AC; font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif"><strong><?php echo $adjunto['nombre'];?></strong></td>
-      <td width="9" height="43"></td>
-      <td width="90" bgcolor="#242424" height="28"  style="text-align:center; font-size: 15px; padding: 5px; color: #A8A7AC; font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif"><strong><?php echo $usuarioPublicador->name; ?></strong></td>
-      <td width="9" height="43"></td>
-      </tr>
-        <tr>
-        <td height="5">
-        </td>
-        </tr>
-    </table>
     <table width="580" height="15" align="center" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td></td>

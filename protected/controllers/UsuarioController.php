@@ -116,7 +116,7 @@ class UsuarioController extends Controller {
         $criteria = new CDbCriteria();
         $criteria->alias = 'item';
         $criteria->with = array(
-            'arch_adjuntos' => array(
+            'adjuntos' => array(
               //  'alias' => 'a_adj',
             ),
             'category' => array(
@@ -154,7 +154,7 @@ class UsuarioController extends Controller {
                 array(
                     'type' => 'raw',
                     'header' => 'Adjuntos',
-                    'value' => 'Utilidades::popDropBox($data->arch_adjuntos)'
+                    'value' => 'Utilidades::popDropBox($data->adjuntos)'
                 ),
                 array(
                 'type' => 'raw',

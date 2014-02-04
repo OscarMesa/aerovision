@@ -18,7 +18,7 @@ class V7guiK2Attachments extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'v7gui_k2_attachments';
+		return 'wwwaerov_joomla.v7gui_k2_attachments';
 	}
 
 	/**

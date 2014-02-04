@@ -26,7 +26,7 @@ class V7guiK2Categories extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'v7gui_k2_categories';
+		return 'wwwaerov_joomla.v7gui_k2_categories';
 	}
 
 	/**

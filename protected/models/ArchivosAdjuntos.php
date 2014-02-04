@@ -1,23 +1,24 @@
 <?php
 
 /**
- * This is the model class for table "v7gui_usergroups".
+ * This is the model class for table "archivos_adjuntos".
  *
- * The followings are the available columns in table 'v7gui_usergroups':
- * @property string $id
- * @property string $parent_id
- * @property integer $lft
- * @property integer $rgt
+ * The followings are the available columns in table 'archivos_adjuntos':
+ * @property integer $id
+ * @property integer $itemID
+ * @property string $filename
  * @property string $title
+ * @property string $titleAttribute
+ * @property integer $id_usuario
  */
-class V7guiUsergroups extends CActiveRecord
+class ArchivosAdjuntos extends CActiveRecord
 {
 	/**
 	 * @return string the associated database table name
 	 */
 	public function tableName()
 	{
-		return 'wwwaerov_joomla.v7gui_usergroups';
+		return 'appaerovision.archivos_adjuntos';
 	}
 
 	/**
@@ -28,12 +29,13 @@ class V7guiUsergroups extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('lft, rgt', 'numerical', 'integerOnly'=>true),
-			array('parent_id', 'length', 'max'=>10),
-			array('title', 'length', 'max'=>100),
+			array('itemID, filename, title', 'required'),
+			array('itemID', 'numerical', 'integerOnly'=>true),
+			array('filename, title', 'length', 'max'=>100),
+			array('titleAttribute', 'length', 'max'=>120),
 			// The following rule is used by search().
 			// @todo Please remove those attributes that should not be searched.
-			array('id, parent_id, lft, rgt, title', 'safe', 'on'=>'search'),
+			array('id, itemID, filename, title, titleAttribute', 'safe', 'on'=>'search'),
 		);
 	}
 
@@ -45,7 +47,7 @@ class V7guiUsergroups extends CActiveRecord
 		// NOTE: you may need to adjust the relation name and the related
 		// class name for the relations automatically generated below.
 		return array(
-                    'usuarios' => array(self::MANY_MANY, 'V7guiUsers', 'v7gui_user_usergroup_map(user_id , group_id)'),
+                    'item' => array(self::BELONGS_TO,'V7guiK2Items','itemID')
 		);
 	}
 
@@ -55,11 +57,12 @@ class V7guiUsergroups extends CActiveRecord
 	public function attributeLabels()
 	{
 		return array(
-			'id' => 'Primary Key',
-			'parent_id' => 'Adjacency List Reference Id',
-			'lft' => 'Nested set lft.',
-			'rgt' => 'Nested set rgt.',
+			'id' => 'ID',
+			'itemID' => 'Item',
+			'filename' => 'Filename',
 			'title' => 'Title',
+			'titleAttribute' => 'Title',
+                        'id_usuario' => 'Id usuario'
 		);
 	}
 
@@ -81,11 +84,11 @@ class V7guiUsergroups extends CActiveRecord
 
 		$criteria=new CDbCriteria;
 
-		$criteria->compare('id',$this->id,true);
-		$criteria->compare('parent_id',$this->parent_id,true);
-		$criteria->compare('lft',$this->lft);
-		$criteria->compare('rgt',$this->rgt);
+		$criteria->compare('id',$this->id);
+		$criteria->compare('itemID',$this->itemID);
+		$criteria->compare('filename',$this->filename,true);
 		$criteria->compare('title',$this->title,true);
+		$criteria->compare('titleAttribute',$this->titleAttribute,true);
 
 		return new CActiveDataProvider($this, array(
 			'criteria'=>$criteria,
@@ -93,18 +96,10 @@ class V7guiUsergroups extends CActiveRecord
 	}
 
 	/**
-	 * @return CDbConnection the database connection used for this class
-	 */
-	public function getDbConnection()
-	{
-		return Yii::app()->db2;
-	}
-
-	/**
 	 * Returns the static model of the specified AR class.
 	 * Please note that you should have this exact method in all your CActiveRecord descendants!
 	 * @param string $className active record class name.
-	 * @return V7guiUsergroups the static model class
+	 * @return ArchivosAdjuntos the static model class
 	 */
 	public static function model($className=__CLASS__)
 	{

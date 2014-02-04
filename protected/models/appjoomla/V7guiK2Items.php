@@ -49,7 +49,7 @@ class V7guiK2Items extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'v7gui_k2_items';
+		return 'wwwaerov_joomla.v7gui_k2_items';
 	}
 
 	/**
@@ -82,6 +82,9 @@ class V7guiK2Items extends CActiveRecord
 		return array(
                     'category' => array(self::BELONGS_TO,'V7guiK2Categories','catid'),
                     'arch_adjuntos' => array(self::HAS_MANY,'V7guiK2Attachments','itemID'),
+                    'revisiones' => array(self::HAS_MANY,'Revision','id_programa'),
+                    'revisionMax' => array(self::STAT,'Revision','id_programa','select'=>'MAX(id_estado_revision)'),
+                    'adjuntos' => array(self::HAS_MANY,'ArchivosAdjuntos','itemID'),
 		);
 	}
 
