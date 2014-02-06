@@ -11,7 +11,7 @@ $criteria->with = array(
     ),
 );
 $criteria->addInCondition('item.catid', V7guiK2Categories::buscarTodasCategorias(3));
-//$criteria->params = array('3');
+$criteria->order = 'item.title';
 $dataProvider = new CActiveDataProvider('V7guiK2Items', array(
     'criteria' => $criteria,
     'pagination' => array(
@@ -23,7 +23,7 @@ $dataProvider = new CActiveDataProvider('V7guiK2Items', array(
 <table id="tbl-filtros">
     <thead>
 
-        <tr><th>Fecha</th><th>Categoria</th></tr>
+        <tr><th>Fecha</th><th>Categoria</th><th>Estado</th></tr>
     </thead>
     <tr>
         <td>   
@@ -71,13 +71,30 @@ $dataProvider = new CActiveDataProvider('V7guiK2Items', array(
                 // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
                 'htmlOptions' => array(
                     'id' => 'filtro-categorias',
-                    
                 ),
                 'buttons' => array(
                     array('label' => 'Categorias:', 'url' => '#',),
                     array(
                         'items' => V7guiK2Categories::buscarCategoriasFiltro(3),
-                        
+                    ),
+                ),
+                    )
+            );
+            ?>
+        </td>
+        <td>
+            <?php
+            $this->widget(
+                    'bootstrap.widgets.TbButtonGroup', array(
+                'type' => 'primary',
+                // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
+                'htmlOptions' => array(
+                    'id' => 'filtro-estados',
+                ),
+                'buttons' => array(
+                    array('label' => 'Categorias:', 'url' => '#',),
+                    array(
+                        'items' => V7guiK2Categories::buscarCategoriasFiltro(3),
                     ),
                 ),
                     )
@@ -86,70 +103,81 @@ $dataProvider = new CActiveDataProvider('V7guiK2Items', array(
         </td>
     </tr>
 </table>
+<div>
+    <form class="form-search" id="buscador-titulo">
+        <div class="input-append">
+            <input type="text" id="texto-filtro" class="span6 search-query btn-large" placeholder="Filtro por titulo" style="padding: 11px 19px;font-size: 17.5px;">
+            <button type="submit" class="btn btn-large">
+                <i class="icon-search"></i>
+                Buscar
+            </button>
+        </div>
+    </form>
+</div>
 <?php ?>
 <div id="grid-lista-programas">
-<?php
-$usuario = V7guiUsers::model()->findByPk(Yii::app()->user->getId());
-$perfil = Utilidades::validarTipoUsuario($usuario->grupos);
-if ($perfil->id == 8) {
-    $this->widget('bootstrap.widgets.TbGridView', array(
-        'id' => 'lista-programas',
-        'dataProvider' => $dataProvider,
-        //'filter' => V7guiK2Items::model(),
-        'type' => 'striped bordered condensed',
-        'columns' => array(
-            'title',
-            'created',
-            'modified',
-            'publish_down',
-            array(
-                'type' => 'raw',
-                'header' => 'Adjuntos',
-                'value' => 'Utilidades::popDropBox($data->adjuntos)'
+    <?php
+    $usuario = V7guiUsers::model()->findByPk(Yii::app()->user->getId());
+    $perfil = Utilidades::validarTipoUsuario($usuario->grupos);
+    if ($perfil->id == 8) {
+        $this->widget('bootstrap.widgets.TbGridView', array(
+            'id' => 'lista-programas',
+            'dataProvider' => $dataProvider,
+            //'filter' => V7guiK2Items::model(),
+            'type' => 'striped bordered condensed',
+            'columns' => array(
+                'title',
+                'created',
+                'modified',
+                'publish_down',
+                array(
+                    'type' => 'raw',
+                    'header' => 'Adjuntos',
+                    'value' => 'Utilidades::popDropBox($data->adjuntos)'
+                ),
+                array(
+                    'type' => 'raw',
+                    'header' => 'Estado',
+                    'value' => function($data, $row) use ($perfil) {
+                        return Utilidades::generarEstado($data, $perfil);
+                    },
+                ),
             ),
-            array(
-                'type' => 'raw',
-                'header' => 'Estado',
-                'value' => function($data, $row) use ($perfil) {
-                    return Utilidades::generarEstado($data, $perfil);
-                },
+                )
+        );
+    } else if ($perfil->id == 7) {
+        $this->widget('bootstrap.widgets.TbGridView', array(
+            'id' => 'lista-programas',
+            'dataProvider' => $dataProvider,
+            //'filter' => V7guiK2Items::model(),
+            'type' => 'striped bordered condensed',
+            'columns' => array(
+                'title',
+                'created',
+                'modified',
+                'publish_down',
+                array(
+                    'type' => 'raw',
+                    'header' => 'Adjuntos',
+                    'value' => 'Utilidades::popDropBox($data->adjuntos)'
+                ),
+                array(
+                    'type' => 'raw',
+                    'header' => 'Adjuntar archivo',
+                    'value' => 'Utilidades::generarLink($data)'
+                ),
+                array(
+                    'type' => 'raw',
+                    'header' => 'Estado',
+                    'value' => function($data, $row) use ($perfil) {
+                        return Utilidades::generarEstado($data, $perfil);
+                    },
+                ),
             ),
-        ),
-            )
-    );
-} else if ($perfil->id == 7) {
-    $this->widget('bootstrap.widgets.TbGridView', array(
-        'id' => 'lista-programas',
-        'dataProvider' => $dataProvider,
-        //'filter' => V7guiK2Items::model(),
-        'type' => 'striped bordered condensed',
-        'columns' => array(
-            'title',
-            'created',
-            'modified',
-            'publish_down',
-            array(
-                'type' => 'raw',
-                'header' => 'Adjuntos',
-                'value' => 'Utilidades::popDropBox($data->adjuntos)'
-            ),
-            array(
-                'type' => 'raw',
-                'header' => 'Adjuntar archivo',
-                'value' => 'Utilidades::generarLink($data)'
-            ),
-            array(
-                'type' => 'raw',
-                'header' => 'Estado',
-                'value' => function($data, $row) use ($perfil) {
-                    return Utilidades::generarEstado($data, $perfil);
-                },
-            ),
-        ),
-            )
-    );
-}
-?>
+                )
+        );
+    }
+    ?>
 </div>
 
 <script type="text/javascript">
@@ -159,14 +187,19 @@ if ($perfil->id == 8) {
         {
             $(element).attr('onclick', 'cargarFiltro($(this))');
         });
-        
+
         $('#filtro-categorias .dropdown-menu a').each(function(index, element)
         {
             $(element).attr('onclick', 'cargarFiltrosCategorias($(this))');
         });
     });
 
-
+    $('#buscador-titulo').on('submit',function(e){
+        $.post('<?php echo Yii::app()->createUrl('usuario/BuscadorFiltro') ?>',{'val-filtro':$('#texto-filtro').val()},function(e){
+             $('#grid-lista-programas').html(e);
+        });
+        e.preventDefault();
+    });
 
     function cargarFiltro(e)
     {
@@ -183,7 +216,7 @@ if ($perfil->id == 8) {
         });
         //return false;
     }
-    
+
     function cargarFiltrosCategorias(e)
     {
         $.ajax({
