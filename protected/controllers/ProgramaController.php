@@ -60,11 +60,11 @@ class ProgramaController extends Controller {
         $params = array('programa' => $programa, 'usuario' => $usuario, 'adjunto' => $adjunto, 'usuarioPublicador' => V7guiUsers::model()->findByPk(Yii::app()->user->id));
         $message->subject = 'Adjuntado nuevo documento en el programa ' . $programa->title;
         $message->setBody($params, 'text/html');
-        if ($usuario->email == 'oscarmesa.elpoli@gmail.com') {
-            $message->addTo($usuario->email);
-            $message->from = 'info@aerovision.com.co';
-            Yii::app()->mail->send($message);
-        }
+       // if ($usuario->email == 'oscarmesa.elpoli@gmail.com') {
+        $message->addTo($usuario->email);
+        $message->from = 'info@aerovision.com.co';
+        Yii::app()->mail->send($message);
+       // }
     }
 
     public function actionProgramasPublicados() {
@@ -165,7 +165,7 @@ class ProgramaController extends Controller {
         $message->subject = 'Aprovación del programa ' . $programa->title . '.';
         $message->setBody($params, 'text/html');
         // if ($usuario->email == 'oscarmesa.elp                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        oli@gmail.com') {
-        $message->addTo('oscarmesa.elpoli@gmail.com');
+        $message->addTo($usuario->email);
         $message->from = 'info@aerovision.com.co';
         Yii::app()->mail->send($message);
     }
@@ -180,7 +180,7 @@ class ProgramaController extends Controller {
         $message->subject = 'Aprovación del programa ' . $programa->title . '.';
         $message->setBody($params, 'text/html');
         // if ($usuario->email == 'oscarmesa.elpoli@gmail.com') {
-        $message->addTo('oscarmesa.elpoli@gmail.com');
+        $message->addTo($usuario->email);
         $message->from = 'info@aerovision.com.co';
         Yii::app()->mail->send($message);
     }

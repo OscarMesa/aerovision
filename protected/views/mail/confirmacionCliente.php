@@ -78,7 +78,7 @@ html
   <table width="580" align="center" border="0" cellspacing="0" cellpadding="0">
   <tr>
     <td>
-        <span style="text-align:center; font-size: 13px; color: #0A0A04; line-height:18px; font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif">Un usuario de nettic realizo la revisión en el programa y <?php ($aprobacion->aprobado?'aprobo':'desaprobo');?> el programa<b><?php echo $programa->title; ?></b>. Le esetamos confirmando esta acción con el fin de que uste realice la aprobación o correcciones de esta.</span>
+        <span style="text-align:center; font-size: 13px; color: #0A0A04; line-height:18px; font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif">Un usuario de nettic realizo la revisión y <?php ($aprobacion->aprobado?'aprobo':'desaprobo');?> el programa<b><?php echo $programa->title; ?></b>. Le esetamos confirmando esta acción con el fin de que uste realice la aprobación o correcciones de esta.</span>
     </td>
   </tr>
       <?php if($aprobacion->motivos != ''){?>

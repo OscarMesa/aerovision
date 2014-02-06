@@ -33,7 +33,7 @@ class UsuarioController extends Controller {
                 'roles' => array('admin'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array('inicio', 'FiltroProgramasXFechas'),
+                'actions' => array('inicio', 'FiltroProgramasXFechas','FiltroProgramasXCategorias'),
                 'users' => array('*'),
             ),
             array('deny', // deny all users
@@ -132,6 +132,12 @@ class UsuarioController extends Controller {
             // echo '<script>alert(\''.$condicion.'\');</script >';
             $criteria->addCondition($condicion);
         }
+        
+        $this->generarGridAjax($criteria);
+  
+    }
+    
+    public function generarGridAjax($criteria){
         $dataProvider = new CActiveDataProvider('V7guiK2Items', array(
             'criteria' => $criteria,
             'pagination' => array(
@@ -140,6 +146,7 @@ class UsuarioController extends Controller {
                 )
         );
         $usuario = V7guiUsers::model()->findByPk(Yii::app()->user->getId());
+        global $perfil;
         $perfil = Utilidades::validarTipoUsuario($usuario->grupos);
         if ($perfil->id == 8) {
             $this->widget('bootstrap.widgets.TbGridView', array(
@@ -160,7 +167,7 @@ class UsuarioController extends Controller {
                     array(
                         'type' => 'raw',
                         'header' => 'Estado',
-                        'value' => function($data, $row) use ($perfil) {
+                        'value' => function($data, $row) use($perfil){
                             return Utilidades::generarEstado($data, $perfil);
                         },
                     ),
@@ -200,7 +207,34 @@ class UsuarioController extends Controller {
             );
         }
     }
+    
+    public function actionFiltroProgramasXCategorias(){
+        $session = new CHttpSession;
+        $session->open();
+        if (isset($_POST['data'])) {
+            $data = $_POST['data'];
+            $session['filPrgCatData'] = $data;
+        } else {
+            $data = $session['filPrgCatData'];
+        }
+        $data = explode(',', $data);
+        Yii::import('application.vendor.*');
+        $criteria = new CDbCriteria();
+        $criteria->alias = 'item';
+        $criteria->with = array(
+            'adjuntos' => array(
+            //  'alias' => 'a_adj',
+            ),
+            'category' => array(
+                'aliar' => 'cat',
+            ),
+        );
+        $criteria->addInCondition('item.catid', V7guiK2Categories::buscarTodasCategorias($data[1]));
+        $this->generarGridAjax($criteria);
+    }
 
+
+    
     public function dameFecha($fecha, $dia, $operacion) {
         list($year, $mon, $day) = explode('-', $fecha);
         return $operacion == '-' ? date('Y-m-d', mktime(0, 0, 0, $mon, $day - $dia, $year)) : date('Y-m-d', mktime(0, 0, 0, $mon, $day + $dia, $year));

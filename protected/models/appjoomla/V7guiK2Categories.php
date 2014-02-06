@@ -159,4 +159,49 @@ class V7guiK2Categories extends CActiveRecord
             }
             return $categorias;
         }
+        
+        public static function buscarCategoriasFiltro($categoria_padre)
+        {
+            $sql = "SELECT c1.name name1,c1.id id1,
+                           c2.name name2,c2.id id2,
+                           c3.name name3,c3.id id3,
+                           c4.name name4, c4.id id4
+                        FROM v7gui_k2_categories AS c1
+                        LEFT JOIN v7gui_k2_categories AS c2 ON (c2.parent= c1.id)
+                        LEFT JOIN v7gui_k2_categories AS c3 ON (c3.parent= c2.id)
+                        LEFT JOIN v7gui_k2_categories AS c4 ON (c4.parent= c3.id)
+                    WHERE c1.parent = ?";
+            $cmd = Yii::app()->db2->createCommand($sql);
+            $resulset = $cmd->queryAll(true, array($categoria_padre));
+            $categorias = array(array('label' => 'Destinos',));
+            foreach ($resulset as $r) {
+                $i = 0;
+                $j=0;
+                $parents = '';
+                $name;
+                foreach ($r as $categoria) {
+                    if($categoria != NULL && $j%2!=0){
+                        if (!array_key_exists($categoria, $categorias)){
+                                $categorias[$categoria] = array('label'=>V7guiK2Categories::generarGuiones($i).$name, 'url'=>'#cat,'.$categoria);
+                        }
+                        $parents = $parents.$categoria.',';
+                        $i++;
+                    }else{
+                        $name = $categoria;
+                    }
+                    $j++;
+                }             
+            } 
+            return $categorias;
+        }
+        
+        public static function generarGuiones($n){
+            $guiones = '';
+            
+            for($i=0;$i<$n;$i++)
+            {
+                $guiones = $guiones.'---';
+            }
+            return $guiones;
+        }
 }

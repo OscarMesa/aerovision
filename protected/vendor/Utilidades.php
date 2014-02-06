@@ -21,7 +21,7 @@ class Utilidades {
         $links = '';
         foreach ($data as $row) {
             $links .= '<li><a href="' . Yii::app()->baseUrl.'/protected/data/adjuntos/' . $row->filename . '">' . $row->filename . '</a></li>';
-        }
+            }
         return $links;
     }
 
