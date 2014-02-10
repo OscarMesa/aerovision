@@ -16,7 +16,7 @@ class AprobacionRevision extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'appaerovision.aprobacion_revision';
+		return 'wwwaerov_appaerovision.aprobacion_revision';
 	}
 
 	/**

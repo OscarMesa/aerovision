@@ -1,20 +1,75 @@
+<!-- using protected/views/site/index.php AS DEMO, you can use any view -->
+<div>Select a Background image: <a href='#' id='file-picker'>click here</a>
+    <img src='' width='50%' id='selected-image' />
+</div>
+ 
+<!-- required div layout begins -->
+<div id='file-picker-viewer'>
+    <div class='body'></div>
+    <hr/>
+    <div id='myuploader'>
+        <label rel='pin'><b>Upload Files
+            <img style='float: left;' src='<?php echo Yii::app()->baseUrl?>/images/pin.png'></b></label>
+        <br/>
+        <div class='files'></div>
+        <div class='progressbar'>
+            <div style='float: left;'>
+                Uploading your file(s), please wait...</div>
+            <img style='float: left;' src='<?php echo Yii::app()->baseUrl?>/images/progressbar.gif' />
+            <div style=
+                'float: left; margin-right:10px;'class='progress'>
+            </div>
+            <img style='float: left;' class='canceljob' 
+                src='<?php echo Yii::app()->baseUrl?>/images/delete.png' title='cancel the upload'/>
+        </div>
+    </div>
+    <hr/>
+    <button id='select_file' class='ok_button'>Select File(s)</button>
+    <button id='delete_file' class='delete_button'>
+        Delete Selected File(s)</button>
+    <button id='close_window' class='cancel_button'>Close Window
+        </button>
+</div>
+<!-- required div layout ends -->
+ 
+<hr/>Logger:<br/><div id='logger'></div>
+ 
 <?php
-/* @var $this SiteController */
-
-$this->pageTitle=Yii::app()->name;
+    // the widget
+    //
+    $this->widget('application.components.MyYiiFileManViewer'
+    ,array(
+        // layout selectors:
+        'launch_selector'=>'#file-picker',
+        'list_selector'=>'#file-picker-viewer',
+        'uploader_selector' => '#myuploader',
+        // messages:
+        'delete_confirm_message' => 'Confirm deletion ?',
+        'select_confirm_message' => 'Confirm selected items ?',
+        'no_selection_message' => 'You are required to select some file',
+        // events:
+        'onBeforeAction'=>
+            "function(viewer,action,file_ids) { return true; }",
+        'onAfterAction'=>
+            "function(viewer,action,file_ids, ok, response) { 
+                if(action == 'select'){ 
+                  // actions: select | delete
+                  $.each(file_ids, function(i, item){ 
+                  $('#logger').append('file_id='+item.file_id 
+                  + ', <img src=\''+item.url+'&size=full\'><br/>');
+                });
+            }
+        }",
+        // 'onBeforeLaunch'=>"function(_viewer){ }",
+        'onClientSideUploaderError'=>
+            "function(messages){ 
+                $(messages).each(function(i,m){  alert(m); }); 
+            }
+        ",
+        'onClientUploaderProgress'=>"function(status, progress){
+            $('#logger').append(
+                'progress: '+status+' '+progress+'%<br/>');
+            }",
+        ));
 ?>
-
-<h1>Welcome to <i><?php echo CHtml::encode(Yii::app()->name); ?></i></h1>
-
-<p>Congratulations! You have successfully created your Yii application.</p>
-
-<p>You may change the content of this page by modifying the following two files:</p>
-<ul>
-	<li>View file: <code><?php echo __FILE__; ?></code></li>
-	<li>Layout file: <code><?php echo $this->getLayoutFile('main'); ?></code></li>
-</ul>
-
-<p>For more details on how to further develop this application, please read
-the <a href="http://www.yiiframework.com/doc/">documentation</a>.
-Feel free to ask in the <a href="http://www.yiiframework.com/forum/">forum</a>,
-should you have any questions.</p>
+<!-- end of protected/views/site/index.php -->

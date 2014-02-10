@@ -18,7 +18,7 @@ class ArchivosAdjuntos extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'appaerovision.archivos_adjuntos';
+		return 'wwwaerov_appaerovision.archivos_adjuntos';
 	}
 
 	/**

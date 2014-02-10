@@ -1,4 +1,8 @@
-
+<?php
+$this->menu=array(
+        array('label'=>'Inicio','url'=>Yii::app()->baseUrl),
+);
+?>
 <?php /** @var BootActiveForm $form */
 $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
     'id'=>'verticalForm',
@@ -9,15 +13,15 @@ $form = $this->beginWidget('bootstrap.widgets.TbActiveForm', array(
 <?php echo $form->textFieldRow($model, 'alias', array('class'=>'span3','disabled'=>'disabled')); ?>
 
 <div class="bs-docs-archivos" id="conetendor-archivos"> 
-    <?php $this->widget('bootstrap.widgets.TbButton', array(
-    'label'=>'Nuevo',
+    <input id="V7guiK2Items_fileUpload_1" class="span3" type="file" numero="1" name="archivo[]">
+</div>
+<?php $this->widget('bootstrap.widgets.TbButton', array(
+    'label'=>'Agregar Archivo',
     'size'=>'small',
     'type'=>'primary',
     'buttonType'=> 'button',
     'htmlOptions'=>array('style'=>'display:block;margin-top:12px;margin-bottom:6px;','id'=>'agregar-archivo'),
 )); ?>
-    <input id="V7guiK2Items_fileUpload_1" class="span3" type="file" numero="1" name="archivo[]">
-</div> 
 <?php $this->widget('bootstrap.widgets.TbButton', array('size'=>'Normal','buttonType'=>'submit', 'block'=>false,'label'=>'Enviar','htmlOptions'=>array('style'=>'display:block;margin-top:12px;'))); ?>
 <?php echo CHtml::hiddenField('id',$model->id);?>
 <?php $this->endWidget(); ?>

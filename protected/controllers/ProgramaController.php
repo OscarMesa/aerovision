@@ -33,7 +33,7 @@ class ProgramaController extends Controller {
                 'roles' => array('admin'),
             ),
             array('allow', // allow admin user to perform 'admin' and 'delete' actions
-                'actions' => array('ProgramasPublicados', 'SubirArchivo', 'UploadNewAttachment', 'enviarMailAdjunto', 'ActualizaEstado'),
+                'actions' => array('VerificarProgreso', 'subirImagen', 'ProgramasPublicados', 'SubirArchivo', 'UploadNewAttachment', 'enviarMailAdjunto', 'ActualizaEstado', 'View', 'Edit'),
                 'users' => array('*'),
             ),
             array('deny', // deny all users
@@ -60,11 +60,11 @@ class ProgramaController extends Controller {
         $params = array('programa' => $programa, 'usuario' => $usuario, 'adjunto' => $adjunto, 'usuarioPublicador' => V7guiUsers::model()->findByPk(Yii::app()->user->id));
         $message->subject = 'Adjuntado nuevo documento en el programa ' . $programa->title;
         $message->setBody($params, 'text/html');
-       // if ($usuario->email == 'oscarmesa.elpoli@gmail.com') {
+        // if ($usuario->email == 'oscarmesa.elpoli@gmail.com') {
         $message->addTo($usuario->email);
         $message->from = 'info@aerovision.com.co';
         Yii::app()->mail->send($message);
-       // }
+        // }
     }
 
     public function actionProgramasPublicados() {
@@ -107,37 +107,37 @@ class ProgramaController extends Controller {
             $revision->id_usuario = Yii::app()->user->getId();
             switch ($_POST['V7guiK2Items']['estado']) {
                 case 1:
-                    $revision->id_estado_revision =  $_POST['AprobacionRevision']['Radio_aprobar'];
+                    $revision->id_estado_revision = $_POST['AprobacionRevision']['Radio_aprobar'];
                     if ($revision->save()) {
                         $aporabacion = new AprobacionRevision();
                         $aporabacion->id_revision = $revision->id_revision;
-                        $aporabacion->aprobado = $revision->id_estado_revision == 3?FALSE:$revision->id_estado_revision==2?TRUE:FALSE;
+                        $aporabacion->aprobado = $revision->id_estado_revision == 3 ? FALSE : $revision->id_estado_revision == 2 ? TRUE : FALSE;
                         $aporabacion->motivos = $_POST['AprobacionRevision']['razones_aprobacion'];
-                        if($aporabacion->save()){
-                            $this->enviarCorreoCliente($revision->id_programa,$aporabacion);
-                        }else{
+                        if ($aporabacion->save()) {
+                            $this->enviarCorreoCliente($revision->id_programa, $aporabacion);
+                        } else {
                             print_r($aporabacion->errors);
                             exit();
                         }
-                    }else {
+                    } else {
                         print_r($revision->errors);
                         exit();
                     }
                     break;
                 case 2:
-                    $revision->id_estado_revision =  $_POST['AprobacionRevision']['Radio_aprobar'];
+                    $revision->id_estado_revision = $_POST['AprobacionRevision']['Radio_aprobar'];
                     if ($revision->save()) {
                         $aporabacion = new AprobacionRevision();
                         $aporabacion->id_revision = $revision->id_revision;
-                        $aporabacion->aprobado = $revision->id_estado_revision == 5?FALSE:$revision->id_estado_revision==4?TRUE:FALSE;
+                        $aporabacion->aprobado = $revision->id_estado_revision == 5 ? FALSE : $revision->id_estado_revision == 4 ? TRUE : FALSE;
                         $aporabacion->motivos = $_POST['AprobacionRevision']['razones_aprobacion'];
-                        if($aporabacion->save()){
-                            $this->enviarCorreoUsuarioNettic($revision->id_programa,$aporabacion);
-                        }else{
+                        if ($aporabacion->save()) {
+                            $this->enviarCorreoUsuarioNettic($revision->id_programa, $aporabacion);
+                        } else {
                             print_r($aporabacion->errors);
                             exit();
                         }
-                    }else {
+                    } else {
                         print_r($revision->errors);
                         exit();
                     }
@@ -154,14 +154,14 @@ class ProgramaController extends Controller {
                 'programa' => V7guiK2Items::model()->findByPk($programa)));
         }
     }
-    public function enviarCorreoUsuarioNettic($id_programa,$aprobacion)
-    {
+
+    public function enviarCorreoUsuarioNettic($id_programa, $aprobacion) {
         $programa = V7guiK2Items::model()->findByPk($id_programa);
         $message = new YiiMailMessage();
         //Se le envia el correo a el usuario de nettic que aprobo o desaprobo la publicacion.
         $usuario = V7guiUsers::model()->with('revisiones')->find('revisiones.id_estado_revision=2 OR revisiones.id_estado_revision=3 AND id_programa=' . $id_programa);
         $message->view = "confirmacionUsuarioNettic";
-        $params = array('programa' => $programa, 'usuario' => $usuario,'aprobacion' => $aprobacion);
+        $params = array('programa' => $programa, 'usuario' => $usuario, 'aprobacion' => $aprobacion);
         $message->subject = 'Aprovación del programa ' . $programa->title . '.';
         $message->setBody($params, 'text/html');
         // if ($usuario->email == 'oscarmesa.elp                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        oli@gmail.com') {
@@ -170,13 +170,13 @@ class ProgramaController extends Controller {
         Yii::app()->mail->send($message);
     }
 
-    public function enviarCorreoCliente($id_programa,$aprobacion) {
+    public function enviarCorreoCliente($id_programa, $aprobacion) {
         $programa = V7guiK2Items::model()->findByPk($id_programa);
         $message = new YiiMailMessage();
         //Se le envia el correo a la persona que monto el adj.
         $usuario = V7guiUsers::model()->with('revisiones')->find('revisiones.id_estado_revision=1 AND id_programa=' . $id_programa);
         $message->view = "confirmacionCliente";
-        $params = array('programa' => $programa, 'usuario' => $usuario,'aprobacion' => $aprobacion);
+        $params = array('programa' => $programa, 'usuario' => $usuario, 'aprobacion' => $aprobacion);
         $message->subject = 'Aprovación del programa ' . $programa->title . '.';
         $message->setBody($params, 'text/html');
         // if ($usuario->email == 'oscarmesa.elpoli@gmail.com') {
@@ -249,6 +249,46 @@ class ProgramaController extends Controller {
             $this->render('subirArchivo', array(
                 'model' => V7guiK2Items::model()->findByPk($id),
             ));
+        }
+    }
+
+    public function actionView($id) {
+        Yii::import('application.controllers.V7guiK2ItemsController');
+        $v7item = new V7guiK2ItemsController($id);
+        $v7item->actionView($id);
+    }
+
+    public function actionEdit($id) {
+        Yii::import('application.controllers.V7guiK2ItemsController');
+        $v7item = new V7guiK2ItemsController($id);
+        $v7item->actionUpdate($id);
+    }
+
+    public function actionSubirImagen() {
+        $error = false;
+        $files = array();
+
+        $nombre_archivo = $_FILES[0]["name"];
+        // $adjunto->hits = 0;
+        if (file_exists(Yii::app()->basePath . '/data/adjuntos/' . $_FILES[0]["name"])) {
+            $datos_archivo = $this->filedata($_FILES[0]["name"]);
+            $j = 0;
+            while (true) {
+                $nombre_archivo = $datos_archivo['name'] . '_' . $j++ . '.' . $datos_archivo['ext'];
+                if (!file_exists(Yii::app()->basePath . '/data/adjuntos/' . $nombre_archivo)) {
+                    break;
+                }
+            }
+        }
+        move_uploaded_file($_FILES[0]['tmp_name'], Yii::app()->basePath . '/data/adjuntos/' . $nombre_archivo);
+        echo json_encode(array('error'=>$error,'nombre_archivo'=>$nombre_archivo));
+     }
+
+    public function actionVerificarProgreso() {
+        //Ver pagina http://www.johnboy.com/php-upload-progress-bar/
+        if (isset($_GET['progress_key'])) {
+            $status = apc_fetch('upload_' . $_GET['progress_key']);
+            echo $status['current'] / $status['total'] * 100;
         }
     }
 

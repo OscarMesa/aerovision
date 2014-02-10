@@ -60,7 +60,8 @@ class V7guiK2Items extends CActiveRecord
 		// NOTE: you should only define rules for those attributes that
 		// will receive user inputs.
 		return array(
-			array('title, catid, introtext, fulltext, extra_fields_search, created, created_by_alias, checked_out, checked_out_time, modified, publish_up, publish_down, image_caption, image_credits, video_caption, video_credits, hits, params, metadesc, metadata, metakey, plugins, language', 'required'),
+			//array('title, catid, introtext, fulltext, extra_fields_search, created, created_by_alias, checked_out, checked_out_time, modified, publish_up, publish_down, image_caption, image_credits, video_caption, video_credits, hits, params, metadesc, metadata, metakey, plugins, language', 'required'),
+                        array('title, catid, publish_down, modified, created', 'required'),
 			array('catid, published, created_by, modified_by, trash, access, ordering, featured, featured_ordering', 'numerical', 'integerOnly'=>true),
 			array('title, alias, gallery, created_by_alias, image_credits, video_credits', 'length', 'max'=>255),
 			array('checked_out, hits', 'length', 'max'=>10),
@@ -88,7 +89,19 @@ class V7guiK2Items extends CActiveRecord
 		);
 	}
 
-	/**
+        public function getNameAtribute($field)
+        {
+            $attr = $this->attributeLabels();
+            return $attr[$field];
+        }
+        
+        public static function generarHeaderGrid($field)
+        {
+            $me = new V7guiK2Items();
+            return $me->getNameAtribute($field);
+        }
+        
+        /**
 	 * @return array customized attribute labels (name=>label)
 	 */
 	public function attributeLabels()
@@ -97,12 +110,12 @@ class V7guiK2Items extends CActiveRecord
 			'id' => 'ID',
 			'title' => 'Titulo del programa',
 			'alias' => 'Alias',
-			'catid' => 'Catid',
-			'published' => 'Published',
-			'introtext' => 'Introtext',
-			'fulltext' => 'Fulltext',
+			'catid' => 'Categoria',
+			'published' => 'Publicado por',
+			'introtext' => 'Texto introductorio',
+			'fulltext' => 'Texto completo',
 			'video' => 'Video',
-			'gallery' => 'Gallery',
+			'gallery' => 'Galleria',
 			'extra_fields' => 'Extra Fields',
 			'extra_fields_search' => 'Extra Fields Search',
 			'created' => 'Fecha de creación',
@@ -111,7 +124,7 @@ class V7guiK2Items extends CActiveRecord
 			'checked_out' => 'Checked Out',
 			'checked_out_time' => 'Checked Out Time',
 			'modified' => 'Fecha de modificación',
-			'modified_by' => 'Modified By',
+			'modified_by' => 'Modificado por',
 			'publish_up' => 'Publish Up',
 			'publish_down' => 'Fecha de finalización',
 			'trash' => 'Trash',
@@ -119,18 +132,18 @@ class V7guiK2Items extends CActiveRecord
 			'ordering' => 'Ordering',
 			'featured' => 'Featured',
 			'featured_ordering' => 'Featured Ordering',
-			'image_caption' => 'Image Caption',
-			'image_credits' => 'Image Credits',
-			'video_caption' => 'Video Caption',
-			'video_credits' => 'Video Credits',
-			'hits' => 'Hits',
+			'image_caption' => 'Captura de imagen',
+			'image_credits' => 'Credito de las imagenes',
+			'video_caption' => 'Captura de video',
+			'video_credits' => 'Credito de video',
+			'hits' => 'Visitas',
 			'params' => 'Params',
 			'metadesc' => 'Metadesc',
 			'metadata' => 'Metadata',
 			'metakey' => 'Metakey',
 			'plugins' => 'Plugins',
 			'language' => 'Language',
-                        'fileUpload' => 'Archivo'
+                        'fileUpload' => 'Archivos adjuntos'
 		);
 	}
 
@@ -212,4 +225,11 @@ class V7guiK2Items extends CActiveRecord
 	{
 		return parent::model($className);
 	}
+        
+        public function getAdjuntosAppYii()
+        {
+            $r = ArchivosAdjuntos::model()->findAll('itemID='.$this->id);
+           
+            return $r;
+        }
 }

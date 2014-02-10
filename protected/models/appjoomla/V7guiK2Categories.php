@@ -160,7 +160,7 @@ class V7guiK2Categories extends CActiveRecord
             return $categorias;
         }
         
-        public static function buscarCategoriasFiltro($categoria_padre)
+        public static function buscarCategoriasFiltro($categoria_padre,$aloneName = false)
         {
             $sql = "SELECT c1.name name1,c1.id id1,
                            c2.name name2,c2.id id2,
@@ -173,7 +173,7 @@ class V7guiK2Categories extends CActiveRecord
                     WHERE c1.parent = ?";
             $cmd = Yii::app()->db2->createCommand($sql);
             $resulset = $cmd->queryAll(true, array($categoria_padre));
-            $categorias = array(array('label' => 'Destinos',));
+            $categorias = (!$aloneName?array(array('label' => 'Destinos',)):array());
             foreach ($resulset as $r) {
                 $i = 0;
                 $j=0;
@@ -182,7 +182,7 @@ class V7guiK2Categories extends CActiveRecord
                 foreach ($r as $categoria) {
                     if($categoria != NULL && $j%2!=0){
                         if (!array_key_exists($categoria, $categorias)){
-                                $categorias[$categoria] = array('label'=>V7guiK2Categories::generarGuiones($i).$name, 'url'=>'#cat,'.$categoria);
+                                $categorias[$categoria] = (!$aloneName?array('label'=>V7guiK2Categories::generarGuiones($i).$name, 'url'=>'#cat,'.$categoria):V7guiK2Categories::generarGuiones($i).$name);
                         }
                         $parents = $parents.$categoria.',';
                         $i++;

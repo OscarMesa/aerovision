@@ -17,7 +17,7 @@ class TipoEstadoRevision extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'appaerovision.tipo_estado_revision';
+		return 'wwwaerov_appaerovision.tipo_estado_revision';
 	}
 
 	/**
@@ -108,7 +108,7 @@ class TipoEstadoRevision extends CActiveRecord
                         LEFT JOIN v7gui_k2_categories AS c3 ON (c3.parent= c2.id)
                         LEFT JOIN v7gui_k2_categories AS c4 ON (c4.parent= c3.id)
                     WHERE c1.parent = ?";
-            $cmd = Yii::app()->db2->createCommand($sql);
+            $cmd = Yii::app()->db->createCommand($sql);
             $resulset = $cmd->queryAll(true, array($categoria_padre));
             $categorias = array(array('label' => 'Destinos',));
             foreach ($resulset as $r) {

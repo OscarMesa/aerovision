@@ -17,6 +17,10 @@ class SiteController extends Controller {
             'page' => array(
                 'class' => 'CViewAction',
             ),
+            'yiifilemanagerfilepicker'=>
+                array('class'=>
+                    'ext.yiifilemanagerfilepicker.YiiFileManagerFilePickerAction'
+            ),
         );
     }
 

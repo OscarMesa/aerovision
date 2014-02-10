@@ -1,4 +1,10 @@
 <?php
+    $this->menu=array(
+        array('label'=>'Inicio','url'=>Yii::app()->baseUrl),
+);
+?>
+
+<?php
 Yii::import('application.vendor.*');
 $criteria = new CDbCriteria();
 $criteria->alias = 'item';
@@ -23,7 +29,7 @@ $dataProvider = new CActiveDataProvider('V7guiK2Items', array(
 <table id="tbl-filtros">
     <thead>
 
-        <tr><th>Fecha</th><th>Categoria</th><th>Estado</th></tr>
+        <tr><th>Fecha</th><th>Categoria</th></tr>
     </thead>
     <tr>
         <td>   
@@ -82,25 +88,6 @@ $dataProvider = new CActiveDataProvider('V7guiK2Items', array(
             );
             ?>
         </td>
-        <td>
-            <?php
-            $this->widget(
-                    'bootstrap.widgets.TbButtonGroup', array(
-                'type' => 'primary',
-                // '', 'primary', 'info', 'success', 'warning', 'danger' or 'inverse'
-                'htmlOptions' => array(
-                    'id' => 'filtro-estados',
-                ),
-                'buttons' => array(
-                    array('label' => 'Categorias:', 'url' => '#',),
-                    array(
-                        'items' => V7guiK2Categories::buscarCategoriasFiltro(3),
-                    ),
-                ),
-                    )
-            );
-            ?>
-        </td>
     </tr>
 </table>
 <div>
@@ -126,7 +113,14 @@ $dataProvider = new CActiveDataProvider('V7guiK2Items', array(
             //'filter' => V7guiK2Items::model(),
             'type' => 'striped bordered condensed',
             'columns' => array(
-                'title',
+                array(
+                    'type' => 'raw',
+                    'header' => V7guiK2Items::generarHeaderGrid('title'),
+                    'value' => function($data){
+                        return Utilidades::generarTitulo($data);
+                    }
+                  )  
+                ,
                 'created',
                 'modified',
                 'publish_down',
@@ -142,6 +136,11 @@ $dataProvider = new CActiveDataProvider('V7guiK2Items', array(
                         return Utilidades::generarEstado($data, $perfil);
                     },
                 ),
+                array(
+                    'type' => 'raw',
+                    'header' => 'Editar',
+                    'value' => 'Utilidades::generarButtonEdit($data)',
+                ),              
             ),
                 )
         );
@@ -152,7 +151,13 @@ $dataProvider = new CActiveDataProvider('V7guiK2Items', array(
             //'filter' => V7guiK2Items::model(),
             'type' => 'striped bordered condensed',
             'columns' => array(
-                'title',
+                array(
+                    'type' => 'raw',
+                    'header' => V7guiK2Items::generarHeaderGrid('title'),
+                    'value' => function($data){
+                        return Utilidades::generarTitulo($data);
+                    }
+                  ),
                 'created',
                 'modified',
                 'publish_down',
@@ -173,6 +178,11 @@ $dataProvider = new CActiveDataProvider('V7guiK2Items', array(
                         return Utilidades::generarEstado($data, $perfil);
                     },
                 ),
+                array(
+                    'type' => 'raw',
+                    'header' => 'Editar',
+                    'value' => 'Utilidades::generarButtonEdit($data)',
+                ),            
             ),
                 )
         );
@@ -193,8 +203,10 @@ $dataProvider = new CActiveDataProvider('V7guiK2Items', array(
             $(element).attr('onclick', 'cargarFiltrosCategorias($(this))');
         });
     });
-
+    
     $('#buscador-titulo').on('submit',function(e){
+        $('#filtro-categorias a').first().html('Categorias:');
+        $('#rangos-fechas a').first().html('Filtro:');
         $.post('<?php echo Yii::app()->createUrl('usuario/BuscadorFiltro') ?>',{'val-filtro':$('#texto-filtro').val()},function(e){
              $('#grid-lista-programas').html(e);
         });
@@ -203,6 +215,9 @@ $dataProvider = new CActiveDataProvider('V7guiK2Items', array(
 
     function cargarFiltro(e)
     {
+        $('#rangos-fechas a').first().html(e.html());
+        $('#filtro-categorias a').first().html('Categorias:');
+        $('#texto-filtro').val('');
         $.ajax({
             type: 'post',
             data: 'data=' + e.attr('href').split(','),
@@ -219,6 +234,9 @@ $dataProvider = new CActiveDataProvider('V7guiK2Items', array(
 
     function cargarFiltrosCategorias(e)
     {
+        $('#filtro-categorias a').first().html(e.html());
+        $('#rangos-fechas a').first().html('Filtro:');
+        $('#texto-filtro').val('');
         $.ajax({
             type: 'post',
             data: 'data=' + e.attr('href').split(','),

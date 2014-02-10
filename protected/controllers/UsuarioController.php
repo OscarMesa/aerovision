@@ -154,7 +154,7 @@ class UsuarioController extends Controller {
                 'aliar' => 'cat',
             ),
         );
-        $criteria->addCondition('lower(item.title) LIKE lower("%'.$data.'%")');
+        $criteria->addCondition('lower(item.title) LIKE lower("%' . $data . '%")');
         $this->generarGridAjax($criteria);
     }
 
@@ -178,7 +178,14 @@ class UsuarioController extends Controller {
                 //'filter' => V7guiK2Items::model(),
                 'type' => 'striped bordered condensed',
                 'columns' => array(
-                    'title',
+                    array(
+                        'type' => 'raw',
+                        'header' => V7guiK2Items::generarHeaderGrid('title'),
+                        'value' => function($data) {
+                            return CHtml::link(CHtml::encode($data->title), array('programa/view', 'id' => $data->id));
+                        }
+                    )
+                    ,
                     'created',
                     'modified',
                     'publish_down',
@@ -194,6 +201,11 @@ class UsuarioController extends Controller {
                             return Utilidades::generarEstado($data, $perfil);
                         },
                     ),
+                    array(
+                        'type' => 'raw',
+                        'header' => 'Editar',
+                        'value' => 'Utilidades::generarButtonEdit($data)',
+                    ),
                 ),
                     )
             );
@@ -204,7 +216,14 @@ class UsuarioController extends Controller {
                 //'filter' => V7guiK2Items::model(),
                 'type' => 'striped bordered condensed',
                 'columns' => array(
-                    'title',
+                    array(
+                        'type' => 'raw',
+                        'header' => V7guiK2Items::generarHeaderGrid('title'),
+                        'value' => function($data) {
+                            return CHtml::link(CHtml::encode($data->title), array('programa/view', 'id' => $data->id));
+                        }
+                    )
+                    ,
                     'created',
                     'modified',
                     'publish_down',
@@ -224,6 +243,11 @@ class UsuarioController extends Controller {
                         'value' => function($data, $row) use ($perfil) {
                             return Utilidades::generarEstado($data, $perfil);
                         },
+                    ),
+                    array(
+                        'type' => 'raw',
+                        'header' => 'Editar',
+                        'value' => 'Utilidades::generarButtonEdit($data)',
                     ),
                 ),
                     )

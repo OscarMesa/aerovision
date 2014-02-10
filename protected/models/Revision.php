@@ -20,7 +20,7 @@ class Revision extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'appaerovision.revision';
+		return 'wwwaerov_appaerovision.revision';
 	}
 
 	/**

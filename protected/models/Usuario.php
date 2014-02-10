@@ -14,7 +14,7 @@ class Usuario extends CActiveRecord
 	 */
 	public function tableName()
 	{
-		return 'appaerovision.usuarios';
+		return 'wwwaerov_appaerovision.usuarios';
 	}
 
 	/**
